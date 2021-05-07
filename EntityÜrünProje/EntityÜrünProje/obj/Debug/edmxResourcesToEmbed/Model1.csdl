@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBEntityFrameworkModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="TblKategori">
+    <Key>
+      <PropertyRef Name="KategoriID" />
+    </Key>
+    <Property Name="KategoriID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KategoriAd" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TblÜrün" Relationship="Self.FK_TblÜrün_TblKategori" FromRole="TblKategori" ToRole="TblÜrün" />
+  </EntityType>
+  <EntityType Name="TblMüşteri">
+    <Key>
+      <PropertyRef Name="MüşteriID" />
+    </Key>
+    <Property Name="MüşteriID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MüşteriAd" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Soyad" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Şehir" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TblSatış" Relationship="Self.FK_TblSatış_TblMüşteri" FromRole="TblMüşteri" ToRole="TblSatış" />
+    <Property Name="Durum" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="TblSatış">
+    <Key>
+      <PropertyRef Name="SatışID" />
+    </Key>
+    <Property Name="SatışID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ürün" Type="Int32" />
+    <Property Name="Müşteri" Type="Int32" />
+    <Property Name="Fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Tarih" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="TblMüşteri" Relationship="Self.FK_TblSatış_TblMüşteri" FromRole="TblSatış" ToRole="TblMüşteri" />
+    <NavigationProperty Name="TblÜrün" Relationship="Self.FK_TblSatış_TblÜrün" FromRole="TblSatış" ToRole="TblÜrün" />
+  </EntityType>
+  <EntityType Name="TblÜrün">
+    <Key>
+      <PropertyRef Name="ÜrünID" />
+    </Key>
+    <Property Name="ÜrünID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ÜrünAd" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Marka" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Stok" Type="Int16" />
+    <Property Name="Fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Durum" Type="Boolean" />
+    <Property Name="Kategori" Type="Int32" />
+    <NavigationProperty Name="TblKategori" Relationship="Self.FK_TblÜrün_TblKategori" FromRole="TblÜrün" ToRole="TblKategori" />
+    <NavigationProperty Name="TblSatış" Relationship="Self.FK_TblSatış_TblÜrün" FromRole="TblÜrün" ToRole="TblSatış" />
+  </EntityType>
+  <Association Name="FK_TblÜrün_TblKategori">
+    <End Role="TblKategori" Type="Self.TblKategori" Multiplicity="0..1" />
+    <End Role="TblÜrün" Type="Self.TblÜrün" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblKategori">
+        <PropertyRef Name="KategoriID" />
+      </Principal>
+      <Dependent Role="TblÜrün">
+        <PropertyRef Name="Kategori" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblSatış_TblMüşteri">
+    <End Role="TblMüşteri" Type="Self.TblMüşteri" Multiplicity="0..1" />
+    <End Role="TblSatış" Type="Self.TblSatış" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblMüşteri">
+        <PropertyRef Name="MüşteriID" />
+      </Principal>
+      <Dependent Role="TblSatış">
+        <PropertyRef Name="Müşteri" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblSatış_TblÜrün">
+    <End Role="TblÜrün" Type="Self.TblÜrün" Multiplicity="0..1" />
+    <End Role="TblSatış" Type="Self.TblSatış" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblÜrün">
+        <PropertyRef Name="ÜrünID" />
+      </Principal>
+      <Dependent Role="TblSatış">
+        <PropertyRef Name="Ürün" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBEntityFrameworkEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="TblKategori" EntityType="Self.TblKategori" />
+    <EntitySet Name="TblMüşteri" EntityType="Self.TblMüşteri" />
+    <EntitySet Name="TblSatış" EntityType="Self.TblSatış" />
+    <EntitySet Name="TblÜrün" EntityType="Self.TblÜrün" />
+    <AssociationSet Name="FK_TblÜrün_TblKategori" Association="Self.FK_TblÜrün_TblKategori">
+      <End Role="TblKategori" EntitySet="TblKategori" />
+      <End Role="TblÜrün" EntitySet="TblÜrün" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblSatış_TblMüşteri" Association="Self.FK_TblSatış_TblMüşteri">
+      <End Role="TblMüşteri" EntitySet="TblMüşteri" />
+      <End Role="TblSatış" EntitySet="TblSatış" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblSatış_TblÜrün" Association="Self.FK_TblSatış_TblÜrün">
+      <End Role="TblÜrün" EntitySet="TblÜrün" />
+      <End Role="TblSatış" EntitySet="TblSatış" />
+    </AssociationSet>
+    <FunctionImport Name="MarkaGetir" ReturnType="Collection(String)" />
+    <EntitySet Name="TblAdmin" EntityType="DBEntityFrameworkModel.TblAdmin" />
+  </EntityContainer>
+  <EntityType Name="TblAdmin">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Kullanıcı" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Şifre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
